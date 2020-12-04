@@ -21,7 +21,7 @@ namespace Day2
             this.upperBound = Convert.ToInt32(bounds[1]);
         }
 
-        internal bool ValidatePassword(string password)
+        internal bool ValidatePasswordCount(string password)
         {
             int charCount = 0;
             foreach(char c in password)
@@ -30,6 +30,14 @@ namespace Day2
             }
 
             return charCount >= this.lowerBound && charCount <= this.upperBound;
+        }
+
+        internal bool ValidatePasswordPositions(string password)
+        {
+            bool firstPositionIsCharacter = password[this.lowerBound - 1] == this.character;
+            bool secondPositionIsCharacter = password[this.upperBound - 1] == this.character;
+
+            return firstPositionIsCharacter ^ secondPositionIsCharacter;
         }
     }
 }

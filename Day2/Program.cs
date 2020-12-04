@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Day2
 {
@@ -8,21 +9,35 @@ namespace Day2
 
         public static void Main(string[] args)
         {
-            int answer = Puzzle1();
+            var input = File.ReadAllLines("input.txt");
+
+            int answer = Puzzle2(input);
             Console.WriteLine(answer);
         }
 
-        static int Puzzle1()
+        static int Puzzle1(string[] input)
         {
-            var input = File.ReadAllLines("input.txt");
-
             int validPasswords = 0;
             foreach (var line in input)
             {
                 var parts = line.Split(':');
 
                 PasswordPolicy policy = new PasswordPolicy(parts[0]);
-                if (policy.ValidatePassword(parts[1].Trim())) validPasswords++;
+                if (policy.ValidatePasswordCount(parts[1].Trim())) validPasswords++;
+            }
+
+            return validPasswords;
+        }
+
+        static int Puzzle2(string[] input)
+        {
+            int validPasswords = 0;
+            foreach (var line in input)
+            {
+                var parts = line.Split(':');
+
+                PasswordPolicy policy = new PasswordPolicy(parts[0]);
+                if (policy.ValidatePasswordPositions(parts[1].Trim())) validPasswords++;
             }
 
             return validPasswords;
