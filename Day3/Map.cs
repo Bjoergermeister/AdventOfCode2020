@@ -17,7 +17,6 @@ namespace Day3
 
         internal bool IsTree(int x, int y)
         {
-            Console.WriteLine($"X: {x}, Y: {y}, Width: {this.Width}, Module: {x % this.Width}");
             x = x % this.Width;
             return this.map[y][x] == '#';
         }
