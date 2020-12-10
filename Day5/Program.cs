@@ -9,9 +9,9 @@ namespace Day5
         static void Main(string[] args)
         {
             string[] input = File.ReadAllLines("input.txt");
-            
-            int heighestID = 0;
 
+            //Input verarbeiten
+            HashSet<int> ids = new HashSet<int>();
             foreach(string seat in input)
             {
                 int row = 127;
@@ -26,12 +26,30 @@ namespace Day5
                     if (seat[i] == 'L') column -= (int)Math.Pow(2, 9 - i);
                 }
 
-                //Calculate and compare id
                 int id = row * 8 + column;
-                heighestID = Math.Max(id, heighestID);
+                ids.Add(id);
+            }   
+
+            //Höchste ID finden
+            int number = 0, heighestID = 0;
+            do 
+            {
+                if (ids.Contains(number))
+                {
+                    heighestID = number;
+                }
+                number++;
+            }while(number < 1000);
+
+            //Sitz-ID finden
+            int seatID = 0;
+            while(!(ids.Contains(seatID - 1) && ids.Contains(seatID + 1) && !ids.Contains(seatID)))
+            {
+                seatID++;
             }
 
-            Console.WriteLine(heighestID);
+            Console.WriteLine($"Höchste Sitz-ID: {heighestID}");
+            Console.WriteLine($"Sitz: {seatID}");
         }
     }
 }
