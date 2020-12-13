@@ -31,7 +31,7 @@ namespace Day4
             int validPassports = 0;
             foreach (Passport passport in passports)
             {
-                if (passport.IsValid()) validPassports++;
+                if (passport.IsValid(true)) validPassports++;
             }
 
             Console.WriteLine(validPassports);
