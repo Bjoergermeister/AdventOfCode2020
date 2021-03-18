@@ -7,17 +7,21 @@ namespace Day15
 {
     class Program
     {
+        static Dictionary<int, int> spokenNumbers = new Dictionary<int, int>();
+        static int lastSpokenNumber = 0;
+        static int turn = 1;
+
         static void Main(string[] args)
-        {
-            Dictionary<int, int> spokenNumbers = new Dictionary<int, int>();
-            int lastSpokenNumber = 0;
-            int turn = 1;
-
-
+        {        
             int[] numbers = File.ReadAllText("input.txt").Split(",").Select(number => Convert.ToInt32(number)).ToArray();
-            
 
-            while(turn < 2020)
+            Console.WriteLine($"Teil 1: {Play(2020, numbers)}");  
+            Console.WriteLine($"Teil 2: {Play(30000000, numbers)}");
+        }
+
+        static int Play(int turns, int[] numbers)
+        {
+            while(turn < turns)
             {
                 int number = (turn <= numbers.Length) ? numbers[turn - 1] : lastSpokenNumber;
 
@@ -34,7 +38,7 @@ namespace Day15
                 turn++;                
             }
 
-            Console.WriteLine(lastSpokenNumber);     
+            return lastSpokenNumber;
         }
     }
 }
