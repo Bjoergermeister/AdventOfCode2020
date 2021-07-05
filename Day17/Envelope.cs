@@ -9,6 +9,8 @@ namespace Day17
         internal int MaxY { get; set; }
         internal int MinZ { get; set; } = -1;
         internal int MaxZ { get; set; } = 1;
+        internal int MinW { get; set; } = -1;
+        internal int MaxW { get; set; } = 1;
         #endregion
 
         internal Envelope(string[] startingGrid)
@@ -26,6 +28,8 @@ namespace Day17
             this.MaxY++;
             this.MinZ--;
             this.MaxZ++;
+            this.MinW--;
+            this.MaxW++;
         }
         #endregion
     }
