@@ -14,15 +14,15 @@ namespace Day18
         static void Main(string[] args)
         {
             input = File.ReadAllLines("input.txt");
-            long result = Puzzle1();
+            long result = ProcessLine(false);
             Console.WriteLine($"Puzzle 1: {result}");
 
             input = File.ReadAllLines("input.txt");
-            result = Puzzle2();
+            result = ProcessLine(true);
             Console.WriteLine($"Puzzle 2: {result}");
         }
 
-        static long Puzzle1()
+        static long ProcessLine(bool prioritize)
         {
             long sum = 0;
             for (int i = 0; i < input.Length; i++)
@@ -39,39 +39,12 @@ namespace Day18
                     else if (currentLine[j] == ')')
                     {
                         int index = (int)openingBrackets.Pop();
-                        string result = ProcessSubstring(index, j, false).ToString();
+                        string result = ProcessSubstring(index, j, prioritize).ToString();
                         currentLine = currentLine.Replace(currentLine.Substring(index, j - index + 1), result.ToString());
                         j = index;
                     }
                 }
-                sum += ProcessSubstring(0, currentLine.Length, false);
-            }
-            return sum;
-        }
-
-        static long Puzzle2()
-        {
-            long sum = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                Stack openingBrackets = new Stack();
-                currentLine = input[i];
-
-                for (int j = 0; j < currentLine.Length; j++)
-                {
-                    if (currentLine[j] == '(')
-                    {
-                        openingBrackets.Push(j);
-                    }
-                    else if (currentLine[j] == ')')
-                    {
-                        int index = (int)openingBrackets.Pop();
-                        string result = ProcessSubstring(index, j, true).ToString();
-                        currentLine = currentLine.Replace(currentLine.Substring(index, j - index + 1), result.ToString());
-                        j = index;
-                    }
-                }
-                sum += ProcessSubstring(0, currentLine.Length, true);
+                sum += ProcessSubstring(0, currentLine.Length, prioritize);
             }
             return sum;
         }
