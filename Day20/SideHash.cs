@@ -1,5 +1,3 @@
-using System;
-
 namespace Day20
 {
     internal struct SideHash
