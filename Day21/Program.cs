@@ -9,17 +9,18 @@ namespace Day21
     class Program
     {
         static string[] input = null;
+        static Dictionary<string, string> pairs = new Dictionary<string, string>();
         static void Main(string[] args)
         {
             input = File.ReadAllLines("input.txt");
 
             Console.WriteLine("Puzzle 1: " + Puzzle1());
+            Console.WriteLine("Puzzle 2: " + Puzzle2());
         }
 
         static int Puzzle1()
         {
             Dictionary<string, List<string>> possiblePairs = new Dictionary<string, List<string>>();
-            Dictionary<string, string> pairs = new Dictionary<string, string>();
             List<List<string>> allIngredients = new List<List<string>>();
 
             foreach (string line in input)
@@ -80,6 +81,24 @@ namespace Day21
             {
                 if (pair.Value.Contains(ingredient)) pair.Value.Remove(ingredient);
             }
+        }
+
+        static string Puzzle2()
+        {
+            List<string> sortedAllergenes = pairs.Keys.ToList();
+            sortedAllergenes.Sort();
+            return String.Join(",", sortedAllergenes.Select(allergene => pairs[allergene]));
+        }
+
+        static Dictionary<string, string> ReverseDictionary(Dictionary<string, string> dict)
+        {
+            Dictionary<string, string> reversed = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> pair in dict)
+            {
+                reversed.Add(pair.Value, pair.Key);
+            }
+
+            return reversed;
         }
     }
 }
