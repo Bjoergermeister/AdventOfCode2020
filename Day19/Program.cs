@@ -8,12 +8,11 @@ namespace Day19
 {
     class Program
     {
-        static string[] input;
         static int index = 0;
         static Dictionary<int, List<List<object>>> rules = new Dictionary<int, List<List<object>>>();
         static void Main(string[] args)
         {
-            input = File.ReadAllLines("input.txt");
+            string[] input = File.ReadAllLines("input.txt");
 
             //Extract rules
             do
@@ -37,63 +36,79 @@ namespace Day19
                 index++;
             } while (input[index].Length > 0);
 
-            int result = Puzzle1();
-            Console.WriteLine($"Puzzle 1: {result}");
+            Console.WriteLine($"Puzzle 1: {Puzzle1(input)}");
+
+            //Change rules            
+            rules[8] = new List<List<object>>() {
+                new List<object>{ 42 },
+                new List<object>{ 42, 8}
+            };
+            rules[11] = new List<List<object>>(){
+                new List<object>{ 42, 31 },
+                new List<object>{ 42, 11, 31 }
+            };
+
+            Console.WriteLine($"Puzzle 2: {Puzzle1(input)}");
         }
 
-        static int Puzzle1()
+        static int Puzzle1(string[] input)
         {
             int validMessages = 0;
             for (int i = index + 1; i < input.Length; i++)
             {
-                if (FitsRule(0, input[i], out int usedCharacters) && usedCharacters == input[i].Length)
+                List<int> choices = FitsRule(0, 0, input[i]);
+                if (choices.Count > 0 && choices.Any())
                 {
-                    validMessages++;
+                    foreach (int choice in choices)
+                    {
+                        if (choice == input[i].Length)
+                        {
+                            validMessages++;
+                        }
+                    }
                 }
             }
             return validMessages;
         }
 
-        static bool FitsRule(int ruleIndex, string s, out int usedCharacters)
+        static List<int> FitsRule(int ruleIndex, int choice, string s)
         {
-            usedCharacters = 0;
+            List<int> newChoices = new List<int>();
             foreach (List<object> subrule in rules[ruleIndex])
             {
-                int usedCharactersToFitRule = 0;
-                bool fitsAllSubrules = true;
+                List<int> currentChoices = new List<int>() { choice };
                 foreach (object rule in subrule)
                 {
                     if (rule is Char)
                     {
-                        if (s[0] == (char)rule)
+                        for (int i = currentChoices.Count - 1; i >= 0; i--)
                         {
-                            usedCharacters = 1;
-                            return true;
+                            if (currentChoices[i] < s.Length && s[currentChoice] == (char)rule)
+                            {
+                                currentChoices[i]++;
+                            }
+                            else
+                            {
+                                currentChoices.RemoveAt(i);
+                            }
                         }
-                        return false;
                     }
                     else
                     {
-                        string substring = s.Substring(usedCharactersToFitRule, s.Length - usedCharactersToFitRule);
-                        if (FitsRule((int)rule, substring, out usedCharacters))
+                        for (int i = currentChoices.Count - 1; i >= 0; i--)
                         {
-                            //Console.WriteLine(usedCharacters);
-                            usedCharactersToFitRule += usedCharacters;
-                        }
-                        else
-                        {
-                            fitsAllSubrules = false;
-                            break;
+                            List<int> newChoicesFromRule = FitsRule((int)rule, currentChoices[i], s);
+                            currentChoices.RemoveAt(i);
+                            if (newChoicesFromRule.Count > 0)
+                            {
+                                currentChoices.InsertRange(i, newChoicesFromRule);
+                            }
                         }
                     }
                 }
-                if (fitsAllSubrules)
-                {
-                    usedCharacters = usedCharactersToFitRule;
-                    return true;
-                }
+                newChoices.AddRange(currentChoices);
             }
-            return false;
+            return newChoices;
         }
     }
 }
